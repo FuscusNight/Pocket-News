@@ -27,6 +27,7 @@ _This project is developed as part of an app development course._
   Clicking/tapping an article opens the full article in the user’s browser.
 - **Decent UI:**  
   The app will have a clean and easy-to-navigate user interface.
+- **Centralized API system:**
 
 ---
 
@@ -36,6 +37,7 @@ _This project is developed as part of an app development course._
   🗺️ Interactive map where users can zoom and click on countries to view the latest news tagged for that country.
 - **AI Translation:**  
   🤖 Integrate Deep Seek AI to translate article titles and snippets. Users can select a language, and the AI will translate the selected article’s info that the news API gives it.
+- **Caching:**
 
 ---
 
