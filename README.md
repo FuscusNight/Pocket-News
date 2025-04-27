@@ -1,6 +1,6 @@
 # 📰 Pocket News
 
-A mobile news app for discovering, searching, and reading news articles from around the world, powered by the **api.webz.io News API Lite**.  
+A mobile news app for discovering, searching, and reading news articles from around the world, powered by the **NewsAPI.org**.  
 _This project is developed as part of an app development course._
 
 ---
@@ -28,6 +28,7 @@ _This project is developed as part of an app development course._
 - **Decent UI:**  
   The app will have a clean and easy-to-navigate user interface.
 - **Centralized API system:**
+  Make sure APi is centralized and not hardcoded to screens
 
 ---
 
@@ -38,6 +39,7 @@ _This project is developed as part of an app development course._
 - **AI Translation:**  
   🤖 Integrate Deep Seek AI to translate article titles and snippets. Users can select a language, and the AI will translate the selected article’s info that the news API gives it.
 - **Caching:**
+  Cache data, so if a user goes back to a previous screen or sees the same article, it doesn't need to request that again from the API
 
 ---
 
@@ -53,7 +55,7 @@ _This project is developed as part of an app development course._
 
 ## 🛠️ Tech Stack
 
-- **api.webz.io News API Lite** (Free Tier)
+- **NewsAPI.org** (Free Tier)
 - **Deep Seek AI** – For translating (Free Tier)
 - **React Native**
 - **Expo Go**
