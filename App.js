@@ -3,15 +3,32 @@ import { createStackNavigator } from "@react-navigation/stack"; // to create a s
 import * as React from "react";
 import { View, Text, Button } from "react-native";
 
-import UkraineNewsScreen from "./screens/UkraineNewsScreen";
+import { getTopHeadlines } from "./api/NewsAPI";
+
+//import UkraineNewsScreen from "./screens/UkraineNewsScreen";
+import RandomNewsScreen from "./screens/RandomNewsScreen";
+import SearchNewsScreen from "./screens/SearchNewsScreen";
+import TopHeadlinesScreen from "./screens/TopHeadlinesScreen";
 
 function HomeScreen({ navigation }) {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Welcome to Pocket News!</Text>
+      <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 30 }}>
+        Welcome to Pocket News!
+      </Text>
       <Button
-        title="Test Me"
-        onPress={() => navigation.navigate("UkraineNews")}
+        title="Top News Worldwide"
+        onPress={() => navigation.navigate("TopHeadlines")}
+      />
+      <View style={{ height: 20 }} />
+      <Button
+        title="Search For News"
+        onPress={() => navigation.navigate("SearchNews")}
+      />
+      <View style={{ height: 20 }} />
+      <Button
+        title="Random News"
+        onPress={() => navigation.navigate("RandomNews")}
       />
     </View>
   );
@@ -29,9 +46,19 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen
-          name="UkraineNews"
-          component={UkraineNewsScreen}
-          options={{ title: "Ukraine News" }}
+          name="TopHeadlines"
+          component={TopHeadlinesScreen}
+          options={{ title: "Top Headlines" }}
+        />
+        <Stack.Screen
+          name="SearchNews"
+          component={SearchNewsScreen}
+          options={{ title: "Search News" }}
+        />
+        <Stack.Screen
+          name="RandomNews"
+          component={RandomNewsScreen}
+          options={{ title: "Random News" }}
         />
       </Stack.Navigator>
     </NavigationContainer>
