@@ -15,26 +15,12 @@ export async function getTopHeadlines({ pageSize = 20 }) {
 }
 
 // Search news by keyword(s) and countries
-export async function searchNews({ query, countries = [], pageSize = 20 }) {
+export async function searchNews({ query, language = "en", pageSize = 20 }) {
   if (!NEWS_API_KEY) throw new Error("Missing NewsAPI key!");
 
-  // NewsAPI only supports one country at a time for /top-headlines, but /everything is worldwide
-  if (countries.length === 0) {
-    // Worldwide search
-    const url = `${BASE_URL}/everything?apiKey=${NEWS_API_KEY}&q=${encodeURIComponent(query)}&pageSize=${pageSize}`;
-    const res = await fetch(url);
-    return res.json();
-  } else {
-    // Multiple countries: fetch for each, then merge, again gotta mind API calls limits here
-    const allResults = [];
-    for (const country of countries) {
-      const url = `${BASE_URL}/top-headlines?apiKey=${NEWS_API_KEY}&q=${encodeURIComponent(query)}&country=${country}&pageSize=${pageSize}`;
-      const res = await fetch(url);
-      const data = await res.json();
-      if (data.articles) allResults.push(...data.articles);
-    }
-    return { articles: allResults };
-  }
+  const url = `${BASE_URL}/everything?apiKey=${NEWS_API_KEY}&q=${encodeURIComponent(query)}&language=${language}&pageSize=${pageSize}`;
+  const res = await fetch(url);
+  return res.json();
 }
 
 export async function getRandomArticle({ query = "", pageSize = 30 }) {
