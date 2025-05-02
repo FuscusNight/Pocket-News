@@ -51,10 +51,10 @@ export async function searchNews({ query, countries = [], pageSize = 20 }) {
   }
 }
 
-// Get a random article (worldwide or by country)
-export async function getRandomArticle({ countries = [] }) {
-  // We'll fetch a page of articles and pick one at random
-  const data = await getTopHeadlines({ countries, pageSize: 30 });
+export async function getRandomArticle({ query = "", pageSize = 30 }) {
+  const url = `${BASE_URL}/everything?apiKey=${NEWS_API_KEY}&q=${encodeURIComponent(query || "news")}&pageSize=${pageSize}`;
+  const res = await fetch(url);
+  const data = await res.json();
   if (!data.articles || data.articles.length === 0) return null;
   const randomIndex = Math.floor(Math.random() * data.articles.length);
   return data.articles[randomIndex];
