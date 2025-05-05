@@ -15,10 +15,15 @@ export async function getTopHeadlines({ pageSize = 20 }) {
 }
 
 // Search news by keyword(s) and countries
-export async function searchNews({ query, language = "en", pageSize = 20 }) {
+export async function searchNews({
+  query,
+  language = "en",
+  pageSize = 20,
+  sortBy = "publishedAt",
+}) {
   if (!NEWS_API_KEY) throw new Error("Missing NewsAPI key!");
 
-  const url = `${BASE_URL}/everything?apiKey=${NEWS_API_KEY}&q=${encodeURIComponent(query)}&language=${language}&pageSize=${pageSize}`;
+  const url = `${BASE_URL}/everything?apiKey=${NEWS_API_KEY}&q=${encodeURIComponent(query)}&language=${language}&pageSize=${pageSize}&sortBy=${sortBy}`;
   const res = await fetch(url);
   return res.json();
 }

@@ -9,6 +9,7 @@ import {
   FlatList,
   Linking,
   Image,
+  StyleSheet,
 } from "react-native";
 
 import { searchNews } from "../api/NewsAPI";
@@ -26,6 +27,12 @@ const LANGUAGES = [
   { code: "jp", name: "Japanese" },
   { code: "zh", name: "Chinese" },
   { code: "ar", name: "Arabic" },
+];
+
+const SORT_OPTIONS = [
+  { value: "publishedAt", label: "Newest First" },
+  { value: "relevancy", label: "Most Relevant" },
+  { value: "popularity", label: "Most Popular" },
 ];
 
 const DEFAULT_KEYWORDS = {
@@ -48,6 +55,7 @@ const DEFAULT_KEYWORDS = {
 export default function SearchNewsScreen() {
   const [query, setQuery] = useState("");
   const [language, setLanguage] = useState("en");
+  const [sortBy, setSortBy] = useState("publishedAt");
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
@@ -69,6 +77,7 @@ export default function SearchNewsScreen() {
       query: searchTerm,
       language,
       pageSize: 50,
+      sortBy,
     });
 
     // Store the articles in state so they can be displayed in the list.
@@ -76,6 +85,11 @@ export default function SearchNewsScreen() {
 
     // Hide the loading spinner.
     setLoading(false);
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
   };
 
   return (
@@ -95,22 +109,42 @@ export default function SearchNewsScreen() {
           marginBottom: 10,
         }}
       />
-      {/* The Picker below lets the user select a language for their news search.
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          marginBottom: 10,
+        }}
+      >
+        {/* The Picker below lets the user select a language for their news search.
       LANGUAGES is an array of objects like { code: "de", name: "German" }.
       For each language, we create a Picker.Item:
       - key={c.code}: unique identifier for React
       - label={c.name}: what the user sees in the dropdown (e.g., "German")
       - value={c.code}: the value set in state when selected (e.g., "de")
       */}
-      <Picker
-        selectedValue={language}
-        onValueChange={setLanguage}
-        style={{ marginBottom: 10 }}
-      >
-        {LANGUAGES.map((c) => (
-          <Picker.Item key={c.code} label={c.name} value={c.code} />
-        ))}
-      </Picker>
+        <View style={{ flex: 1, marginRight: 5 }}>
+          <Text>Language:</Text>
+          <Picker selectedValue={language} onValueChange={setLanguage}>
+            {LANGUAGES.map((c) => (
+              <Picker.Item key={c.code} label={c.name} value={c.code} />
+            ))}
+          </Picker>
+        </View>
+
+        <View style={{ flex: 1, marginLeft: 5 }}>
+          <Text>Sort by:</Text>
+          <Picker selectedValue={sortBy} onValueChange={setSortBy}>
+            {SORT_OPTIONS.map((option) => (
+              <Picker.Item
+                key={option.value}
+                label={option.label}
+                value={option.value}
+              />
+            ))}
+          </Picker>
+        </View>
+      </View>
       <Button title="Search" onPress={handleSearch} />
       {loading ? (
         <ActivityIndicator
@@ -151,8 +185,29 @@ export default function SearchNewsScreen() {
               <Text style={{ fontWeight: "bold", fontSize: 16 }}>
                 {item.title}
               </Text>
-              <Text style={{ color: "gray" }}>{item.source?.name}</Text>
-              <Text numberOfLines={3}>{item.description}</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text style={{ color: "gray" }}>{item.source?.name}</Text>
+                {item.publishedAt && (
+                  <Text style={{ color: "gray", fontSize: 12 }}>
+                    {formatDate(item.publishedAt)}
+                  </Text>
+                )}
+              </View>
+              {item.author && (
+                <Text
+                  style={{ fontStyle: "italic", fontSize: 12, marginTop: 2 }}
+                >
+                  By {item.author}
+                </Text>
+              )}
+              <Text numberOfLines={3} style={{ marginTop: 5 }}>
+                {item.description}
+              </Text>
               <Button
                 title="Read More"
                 onPress={() => Linking.openURL(item.url)}
