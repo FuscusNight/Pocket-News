@@ -93,48 +93,44 @@ export default function SearchNewsScreen() {
   };
 
   return (
-    <View style={{ flex: 1, padding: 10 }}>
-      <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 10 }}>
-        Search News
-      </Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Search News</Text>
+
       <TextInput
         placeholder="Enter keywords (e.g. technology, Ukraine)"
         value={query}
         onChangeText={setQuery}
-        style={{
-          borderWidth: 1,
-          borderColor: "#ccc",
-          borderRadius: 5,
-          padding: 8,
-          marginBottom: 10,
-        }}
+        style={styles.searchInput}
       />
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          marginBottom: 10,
-        }}
-      >
-        {/* The Picker below lets the user select a language for their news search.
+
+      <View style={styles.filtersContainer}>
+        <View style={styles.filterColumn}>
+          <Text style={styles.filterLabel}>Language:</Text>
+          <Picker
+            selectedValue={language}
+            onValueChange={setLanguage}
+            style={styles.picker}
+          >
+            {/* The Picker below lets the user select a language for their news search.
       LANGUAGES is an array of objects like { code: "de", name: "German" }.
       For each language, we create a Picker.Item:
       - key={c.code}: unique identifier for React
       - label={c.name}: what the user sees in the dropdown (e.g., "German")
       - value={c.code}: the value set in state when selected (e.g., "de")
       */}
-        <View style={{ flex: 1, marginRight: 5 }}>
-          <Text>Language:</Text>
-          <Picker selectedValue={language} onValueChange={setLanguage}>
             {LANGUAGES.map((c) => (
               <Picker.Item key={c.code} label={c.name} value={c.code} />
             ))}
           </Picker>
         </View>
 
-        <View style={{ flex: 1, marginLeft: 5 }}>
-          <Text>Sort by:</Text>
-          <Picker selectedValue={sortBy} onValueChange={setSortBy}>
+        <View style={styles.filterColumn}>
+          <Text style={styles.filterLabel}>Sort by:</Text>
+          <Picker
+            selectedValue={sortBy}
+            onValueChange={setSortBy}
+            style={styles.picker}
+          >
             {SORT_OPTIONS.map((option) => (
               <Picker.Item
                 key={option.value}
@@ -145,15 +141,17 @@ export default function SearchNewsScreen() {
           </Picker>
         </View>
       </View>
+
       <Button title="Search" onPress={handleSearch} />
+
       {loading ? (
         <ActivityIndicator
           size="large"
           color="#0000ff"
-          style={{ marginTop: 20 }}
+          style={styles.loadingIndicator}
         />
       ) : hasSearched && articles.length === 0 ? (
-        <Text style={{ marginTop: 20, color: "gray" }}>
+        <Text style={styles.noResultsText}>
           No articles found for your search.
         </Text>
       ) : (
@@ -162,50 +160,27 @@ export default function SearchNewsScreen() {
           keyExtractor={(item, idx) => item.url + idx} // Item indetifier idx combined with articles url (item.url) to make sure each item is unique
           // The renderItem function is called for each item in the articles array, always call it item otherwise it will throw an error or you have to deconstruct it in rendering
           renderItem={({ item }) => (
-            <View
-              style={{
-                marginBottom: 20,
-                borderBottomWidth: 1,
-                borderColor: "#ccc",
-                paddingBottom: 10,
-              }}
-            >
+            <View style={styles.articleContainer}>
               {item.urlToImage && (
                 <Image
                   source={{ uri: item.urlToImage }} // The image is fetched from the article object of newsAPI
-                  style={{
-                    width: "100%",
-                    height: 180,
-                    borderRadius: 8,
-                    marginBottom: 5,
-                  }}
+                  style={styles.articleImage}
                   resizeMode="cover"
                 />
               )}
-              <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-                {item.title}
-              </Text>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Text style={{ color: "gray" }}>{item.source?.name}</Text>
+              <Text style={styles.articleTitle}>{item.title}</Text>
+              <View style={styles.sourceDateContainer}>
+                <Text style={styles.sourceText}>{item.source?.name}</Text>
                 {item.publishedAt && (
-                  <Text style={{ color: "gray", fontSize: 12 }}>
+                  <Text style={styles.dateText}>
                     {formatDate(item.publishedAt)}
                   </Text>
                 )}
               </View>
               {item.author && (
-                <Text
-                  style={{ fontStyle: "italic", fontSize: 12, marginTop: 2 }}
-                >
-                  By {item.author}
-                </Text>
+                <Text style={styles.authorText}>By {item.author}</Text>
               )}
-              <Text numberOfLines={3} style={{ marginTop: 5 }}>
+              <Text numberOfLines={3} style={styles.descriptionText}>
                 {item.description}
               </Text>
               <Button
@@ -219,3 +194,84 @@ export default function SearchNewsScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  searchInput: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 8,
+    marginBottom: 10,
+  },
+  filtersContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 15,
+  },
+  filterColumn: {
+    flex: 1,
+    marginHorizontal: 5,
+  },
+  filterLabel: {
+    marginBottom: 2,
+  },
+  picker: {
+    backgroundColor: "#f5f5f5",
+    borderRadius: 4,
+  },
+  loadingIndicator: {
+    marginTop: 20,
+  },
+  noResultsText: {
+    marginTop: 20,
+    color: "gray",
+    textAlign: "center",
+  },
+  articleContainer: {
+    marginBottom: 20,
+    borderBottomWidth: 1,
+    borderColor: "#ccc",
+    paddingBottom: 10,
+  },
+  articleImage: {
+    width: "100%",
+    height: 180,
+    borderRadius: 8,
+    marginBottom: 5,
+  },
+  articleTitle: {
+    fontWeight: "bold",
+    fontSize: 16,
+    marginBottom: 4,
+  },
+  sourceDateContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 2,
+  },
+  sourceText: {
+    color: "gray",
+  },
+  dateText: {
+    color: "gray",
+    fontSize: 12,
+  },
+  authorText: {
+    fontStyle: "italic",
+    fontSize: 12,
+    marginBottom: 4,
+  },
+  descriptionText: {
+    marginBottom: 8,
+  },
+});
