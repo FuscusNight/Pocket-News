@@ -17,7 +17,7 @@ function HomeScreen({ navigation }) {
         Welcome to Pocket News!
       </Text>
       <Button
-        title="Top Headlines (English - Worldwide"
+        title="Top Headlines (English Only)"
         onPress={() => navigation.navigate("TopHeadlines")}
       />
       <View style={{ height: 20 }} />

@@ -6,10 +6,10 @@ console.log("It's working", NEWS_API_KEY);
 const BASE_URL = "https://newsapi.org/v2";
 
 // Intendeded to let users pick top headlines from specific countries but NewsAPI just gives nothing when using their country paramater, brilliant. So, limited to primarily English from USA mostly.
-export async function getTopHeadlines({ pageSize = 20 }) {
+export async function getTopHeadlines({ pageSize = 20, category = "general" }) {
   if (!NEWS_API_KEY) throw new Error("Missing NewsAPI key!");
 
-  const url = `${BASE_URL}/top-headlines?apiKey=${NEWS_API_KEY}&category=general&pageSize=${pageSize}`;
+  const url = `${BASE_URL}/top-headlines?apiKey=${NEWS_API_KEY}&category=${category}&pageSize=${pageSize}`;
   const res = await fetch(url);
   return res.json();
 }
