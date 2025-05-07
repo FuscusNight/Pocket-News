@@ -13,6 +13,7 @@ import {
 } from "react-native";
 
 import { searchNews } from "../api/NewsAPI";
+import { storeData, getData } from "../utils/cache";
 
 const LANGUAGES = [
   { code: "en", name: "English" },
@@ -59,6 +60,7 @@ export default function SearchNewsScreen() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSearch = async () => {
     const searchTerm = query.trim() // trim to remove whitespace
@@ -68,23 +70,66 @@ export default function SearchNewsScreen() {
     // Show the loading spinner and mark that a search has been performed.
     setLoading(true);
     setHasSearched(true);
+    setError(null); // Clear any previous errors
 
-    // Call the centralized API function, passing:
-    // - the search term (user's input or default)
-    // - the selected language code (e.g., "en", "de", etc.)
-    // - how many articles to fetch (50)
-    const result = await searchNews({
-      query: searchTerm,
-      language,
-      pageSize: 50,
-      sortBy,
-    });
+    // Converts search term to lowercase for cache key, otherwise it will cache the same search term in different cases.
+    const normalizedSearchTerm = searchTerm.toLowerCase();
+    // Create a unique cache key based on search parameters
+    const cacheKey = `search_${normalizedSearchTerm}_${language}_${sortBy}`;
+    console.log(
+      `Searching for: "${searchTerm}" in ${language}, sorted by ${sortBy}`
+    );
 
-    // Store the articles in state so they can be displayed in the list.
-    setArticles(result.articles || []);
+    try {
+      // Try to get cached data first
+      const cachedData = await getData(cacheKey);
 
-    // Hide the loading spinner.
-    setLoading(false);
+      if (cachedData) {
+        // If we have valid cached data, use it
+        console.log("📦 Using cached data for:", searchTerm);
+        setArticles(cachedData.articles || []);
+        setLoading(false);
+        return;
+      }
+
+      // If no valid cache, fetch from API
+      // Call the centralized API function, passing:
+      // - the search term (user's input or default)
+      // - the selected language code (e.g., "en", "de", etc.)
+      // - how many articles to fetch (50)
+      console.log("🌐 Fetching fresh data from API for:", searchTerm);
+      const result = await searchNews({
+        query: searchTerm,
+        language,
+        pageSize: 50,
+        sortBy,
+      });
+
+      if (!result.articles || result.articles.length === 0) {
+        console.log("⚠️ No articles found for:", searchTerm);
+        setError("No articles found. Try different keywords.");
+        setArticles([]);
+        return;
+      }
+
+      // Store the articles in state so they can be displayed in the list.
+      console.log(
+        `✅ Found ${result.articles.length} articles for:`,
+        searchTerm
+      );
+      setArticles(result.articles || []);
+
+      // Cache the new result
+      await storeData(cacheKey, result);
+      console.log("💾 Cached new data for:", searchTerm);
+    } catch (error) {
+      console.error("❌ Search error:", error);
+      console.error("Search error:", error);
+      setError("Failed to fetch news. Please try again.");
+      setArticles([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const formatDate = (dateString) => {
