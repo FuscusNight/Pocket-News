@@ -37,7 +37,7 @@ _This project is developed as part of an app development course._
 - **2D World Map:**  
   🗺️ Interactive map where users can zoom and click on countries to view the latest news tagged for that country.
 - **AI Or Other Means Of Translation:**  
-  🤖 Integrate Deep Seek AI to translate article titles and snippets. Users can select a language, and the AI will translate the selected article’s info that the news API gives it.
+  🤖 Integrate Mistral AI to translate article titles and snippets. Users can select a language, and the AI will translate the selected article’s info that the news API gives it.
   If problems occur with the AI API, look into alternative means to do/request translations of non-english articles
 - **Caching:**
   Cache data, so if a user goes back to a previous screen or sees the same article, it doesn't need to request that again from the API
@@ -57,7 +57,7 @@ _This project is developed as part of an app development course._
 ## 🛠️ Tech Stack
 
 - **NewsAPI.org** (Free Tier)
-- **Deep Seek AI** – For translating (Free Tier)
+- **Mistral AI** – For translating (Free Tier)
 - **React Native**
 - **Expo Go**
 - Some sort of library for getting 2D map of the world (or 3D globe)
