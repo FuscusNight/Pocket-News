@@ -138,9 +138,9 @@ export default function TopHeadlinesScreen() {
         nativeLanguage,
       );
 
-      // Store translated content in state, article.url is used as the key to ensure unique translations and ...prev is used to merge the previous state with the new state
+      // Store translated content in state, article.url is used as the key to ensure unique translations so it does not mix up the translations
       setTranslatedArticles((prev) => ({
-        ...prev,
+        ...prev, // makes sure we keep the previous translations with ...prev all together so we dont lose em' and as mentioned before, article.url makes sure they got their unique keys
         [article.url]: {
           title: translatedTitle,
           description: translatedDescription,
@@ -148,10 +148,17 @@ export default function TopHeadlinesScreen() {
       }));
     } catch (error) {
       console.error("Translation error:", error);
-      Alert.alert(
-        "Translation Error",
-        "Failed to translate the article. Please try again.",
-      );
+      if (error.message.includes("429")) {
+        Alert.alert(
+          "Rate Limit Reached",
+          "Please wait a moment before trying to translate again.",
+        );
+      } else {
+        Alert.alert(
+          "Translation Error",
+          "Failed to translate the article. Please try again.",
+        );
+      }
     } finally {
       setTranslating(false);
     }
