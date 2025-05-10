@@ -164,6 +164,7 @@ export default function TopHeadlinesScreen() {
     }
   };
 
+  /* RENDERING START ! ! ! */
   return (
     <View style={{ flex: 1, padding: 10 }}>
       {/* Screen title */}
@@ -278,8 +279,10 @@ export default function TopHeadlinesScreen() {
       )}
     </View>
   );
+  /* RENDERING END ! ! ! */
 }
 
+/*FRONTEND STYLING START ! ! !*/
 const styles = StyleSheet.create({
   categoriesContainer: {
     marginBottom: 15,

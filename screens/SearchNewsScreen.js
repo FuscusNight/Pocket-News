@@ -203,6 +203,7 @@ export default function SearchNewsScreen() {
     }
   };
 
+  /* RENDERING START ! ! ! */
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Search News</Text>
@@ -324,8 +325,10 @@ export default function SearchNewsScreen() {
       )}
     </View>
   );
+  /* RENDERING END ! ! ! */
 }
 
+/*FRONTEND STYLING ! ! !*/
 const styles = StyleSheet.create({
   container: {
     flex: 1,
