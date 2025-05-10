@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,8 +11,10 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  Alert,
 } from "react-native";
 
+import { translateText } from "../api/MistralAPI";
 import { getTopHeadlines } from "../api/NewsAPI";
 import { getData, storeData, getHeadlinesCacheKey } from "../utils/cache";
 
@@ -33,6 +36,24 @@ export default function TopHeadlinesScreen() {
   const [hasFetched, setHasFetched] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("general");
   const [error, setError] = useState(null);
+  const [nativeLanguage, setNativeLanguage] = useState("en");
+  const [translatedArticles, setTranslatedArticles] = useState({});
+  const [translating, setTranslating] = useState(false);
+
+  // useEffect to load the native language preference
+  useEffect(() => {
+    const loadNativeLanguage = async () => {
+      try {
+        const savedLanguage = await AsyncStorage.getItem("nativeLanguage");
+        if (savedLanguage) {
+          setNativeLanguage(savedLanguage);
+        }
+      } catch (error) {
+        console.error("Error loading native language:", error);
+      }
+    };
+    loadNativeLanguage();
+  }, []);
 
   // Function to fetch headlines for a specific category
   const fetchHeadlines = async (category = selectedCategory) => {
@@ -99,6 +120,41 @@ export default function TopHeadlinesScreen() {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString();
+  };
+
+  // Function to handle translation of article content
+  const handleTranslate = async (article) => {
+    if (translating) return; // Prevent multiple simultaneous translations
+
+    setTranslating(true);
+    try {
+      // First, get the translated title and description separately
+      const translatedTitle = await translateText(
+        article.title,
+        nativeLanguage,
+      );
+      const translatedDescription = await translateText(
+        article.description,
+        nativeLanguage,
+      );
+
+      // Store translated content in state, article.url is used as the key to ensure unique translations and ...prev is used to merge the previous state with the new state
+      setTranslatedArticles((prev) => ({
+        ...prev,
+        [article.url]: {
+          title: translatedTitle,
+          description: translatedDescription,
+        },
+      }));
+    } catch (error) {
+      console.error("Translation error:", error);
+      Alert.alert(
+        "Translation Error",
+        "Failed to translate the article. Please try again.",
+      );
+    } finally {
+      setTranslating(false);
+    }
   };
 
   return (
@@ -176,8 +232,10 @@ export default function TopHeadlinesScreen() {
                   resizeMode="cover"
                 />
               )}
-              {/* Article title */}
-              <Text style={styles.articleTitle}>{item.title}</Text>
+              {/* Use translated title if available */}
+              <Text style={styles.articleTitle}>
+                {translatedArticles[item.url]?.title || item.title}
+              </Text>
               {/* Source and date information */}
               <View style={styles.sourceDateContainer}>
                 <Text style={styles.sourceText}>{item.source?.name}</Text>
@@ -191,15 +249,22 @@ export default function TopHeadlinesScreen() {
               {item.author && (
                 <Text style={styles.authorText}>By {item.author}</Text>
               )}
-              {/* Article description */}
+              {/* Uses translated description if available */}
               <Text numberOfLines={3} style={styles.descriptionText}>
-                {item.description}
+                {translatedArticles[item.url]?.description || item.description}
               </Text>
-              {/* Read more button */}
-              <Button
-                title="Read More"
-                onPress={() => Linking.openURL(item.url)}
-              />
+              {/* Button container for both Read More and Translate */}
+              <View style={styles.buttonContainer}>
+                <Button
+                  title="Read More"
+                  onPress={() => Linking.openURL(item.url)}
+                />
+                <Button
+                  title={translating ? "Translating..." : "Translate"}
+                  onPress={() => handleTranslate(item)}
+                  disabled={translating}
+                />
+              </View>
             </View>
           )}
         />
@@ -266,5 +331,10 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     marginBottom: 8,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 10,
   },
 });
