@@ -13,7 +13,9 @@ import {
 } from "react-native";
 
 import { getTopHeadlines } from "../api/NewsAPI";
+import { getData, storeData, getHeadlinesCacheKey } from "../utils/cache";
 
+// Available news categories with their display labels
 const CATEGORIES = [
   { value: "general", label: "General" },
   { value: "business", label: "Business" },
@@ -25,27 +27,75 @@ const CATEGORIES = [
 ];
 
 export default function TopHeadlinesScreen() {
+  // State management for articles, loading state, fetch status, selected category, and errors
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [hasFetched, setHasFetched] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("general");
+  const [error, setError] = useState(null);
 
+  // Function to fetch headlines for a specific category
   const fetchHeadlines = async (category = selectedCategory) => {
     setLoading(true);
     setHasFetched(true);
-    const result = await getTopHeadlines({
-      pageSize: 20,
-      category,
-    });
-    setArticles(result.articles || []);
-    setLoading(false);
+    setError(null);
+
+    // Generate cache key based on category
+    const cacheKey = getHeadlinesCacheKey(category);
+    console.log(`Fetching headlines for category: ${category}`);
+
+    try {
+      // Try to get cached data first
+      const cachedData = await getData(cacheKey);
+
+      if (cachedData) {
+        console.log("📦 Using cached headlines for:", category);
+        setArticles(cachedData.articles || []);
+        setLoading(false);
+        return;
+      }
+
+      // If no cache, fetch from API
+      console.log("🌐 Fetching fresh headlines for:", category);
+      const result = await getTopHeadlines({
+        pageSize: 20,
+        category,
+      });
+
+      // Handle no results case
+      if (!result.articles || result.articles.length === 0) {
+        console.log("⚠️ No headlines found for:", category);
+        setError("No headlines found for this category.");
+        setArticles([]);
+        return;
+      }
+
+      // Update state with new articles and cache the result
+      console.log(
+        `✅ Found ${result.articles.length} headlines for:`,
+        category,
+      );
+      setArticles(result.articles || []);
+
+      // Cache the new result
+      await storeData(cacheKey, result);
+      console.log("💾 Cached new headlines for:", category);
+    } catch (error) {
+      console.error("❌ Headlines fetch error:", error);
+      setError("Failed to fetch headlines. Please try again.");
+      setArticles([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  // Function to handle category selection
   const selectCategory = (category) => {
     setSelectedCategory(category);
     fetchHeadlines(category);
   };
 
+  // Helper function to format dates
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString();
@@ -53,6 +103,7 @@ export default function TopHeadlinesScreen() {
 
   return (
     <View style={{ flex: 1, padding: 10 }}>
+      {/* Screen title */}
       <Text
         style={{
           fontSize: 20,
@@ -64,6 +115,7 @@ export default function TopHeadlinesScreen() {
         Top Headlines (English Only)
       </Text>
 
+      {/* Category selection buttons */}
       <View style={styles.categoriesContainer}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {CATEGORIES.map((category) => (
@@ -89,16 +141,23 @@ export default function TopHeadlinesScreen() {
         </ScrollView>
       </View>
 
+      {/* Initial fetch button */}
       {!hasFetched && (
         <Button title="Show Headlines" onPress={() => fetchHeadlines()} />
       )}
 
+      {/* Conditional rendering based on loading, error, and data states */}
       {loading ? (
         <ActivityIndicator
           size="large"
           color="#0000ff"
           style={{ marginTop: 20 }}
         />
+      ) : error ? (
+        <View style={{ marginTop: 20, alignItems: "center" }}>
+          <Text style={{ color: "red", marginBottom: 10 }}>{error}</Text>
+          <Button title="Try Again" onPress={() => fetchHeadlines()} />
+        </View>
       ) : hasFetched && articles.length === 0 ? (
         <Text style={{ marginTop: 20, color: "gray" }}>
           No headlines found.
@@ -109,6 +168,7 @@ export default function TopHeadlinesScreen() {
           keyExtractor={(item, idx) => item.url + idx}
           renderItem={({ item }) => (
             <View style={styles.articleContainer}>
+              {/* Article image if available */}
               {item.urlToImage && (
                 <Image
                   source={{ uri: item.urlToImage }}
@@ -116,7 +176,9 @@ export default function TopHeadlinesScreen() {
                   resizeMode="cover"
                 />
               )}
+              {/* Article title */}
               <Text style={styles.articleTitle}>{item.title}</Text>
+              {/* Source and date information */}
               <View style={styles.sourceDateContainer}>
                 <Text style={styles.sourceText}>{item.source?.name}</Text>
                 {item.publishedAt && (
@@ -125,12 +187,15 @@ export default function TopHeadlinesScreen() {
                   </Text>
                 )}
               </View>
+              {/* Author information if available */}
               {item.author && (
                 <Text style={styles.authorText}>By {item.author}</Text>
               )}
+              {/* Article description */}
               <Text numberOfLines={3} style={styles.descriptionText}>
                 {item.description}
               </Text>
+              {/* Read more button */}
               <Button
                 title="Read More"
                 onPress={() => Linking.openURL(item.url)}

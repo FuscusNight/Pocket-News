@@ -13,8 +13,9 @@ import {
 } from "react-native";
 
 import { searchNews } from "../api/NewsAPI";
-import { storeData, getData } from "../utils/cache";
+import { storeData, getData, getSearchCacheKey } from "../utils/cache";
 
+// Available languages for news search
 const LANGUAGES = [
   { code: "en", name: "English" },
   { code: "sv", name: "Swedish" },
@@ -30,12 +31,14 @@ const LANGUAGES = [
   { code: "ar", name: "Arabic" },
 ];
 
+// Available sort options for news search
 const SORT_OPTIONS = [
   { value: "publishedAt", label: "Newest First" },
   { value: "relevancy", label: "Most Relevant" },
   { value: "popularity", label: "Most Popular" },
 ];
 
+// Default keywords for each language if user doesn't provide a search term
 const DEFAULT_KEYWORDS = {
   ar: "أخبار",
   de: "nachrichten",
@@ -73,9 +76,10 @@ export default function SearchNewsScreen() {
     setError(null); // Clear any previous errors
 
     // Converts search term to lowercase for cache key, otherwise it will cache the same search term in different cases.
-    const normalizedSearchTerm = searchTerm.toLowerCase();
-    // Create a unique cache key based on search parameters
-    const cacheKey = `search_${normalizedSearchTerm}_${language}_${sortBy}`;
+    //const normalizedSearchTerm = searchTerm.toLowerCase();
+
+    // Generates a unique cache key based on search parameters
+    const cacheKey = getSearchCacheKey(searchTerm, language, sortBy);
     console.log(
       `Searching for: "${searchTerm}" in ${language}, sorted by ${sortBy}`,
     );

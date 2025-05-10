@@ -43,9 +43,21 @@ export const clearCache = async (key) => {
 export const clearAllCache = async () => {
   try {
     const keys = await AsyncStorage.getAllKeys();
-    const cacheKeys = keys.filter((key) => key.startsWith("search_"));
+    const cacheKeys = keys.filter(
+      (key) => key.startsWith("search_") || key.startsWith("headlines_"),
+    );
     await AsyncStorage.multiRemove(cacheKeys);
   } catch (e) {
     console.error("Error clearing all cache:", e);
   }
+};
+
+// Get cache key for headlines screen
+export const getHeadlinesCacheKey = (category) => {
+  return `headlines_${category}`;
+};
+// Helper function for search cache keys
+export const getSearchCacheKey = (searchTerm, language, sortBy) => {
+  const normalizedSearchTerm = searchTerm.toLowerCase(); // Convert search term to lowercase , otherwise it will cache the same search term in different cases.
+  return `search_${normalizedSearchTerm}_${language}_${sortBy}`;
 };
