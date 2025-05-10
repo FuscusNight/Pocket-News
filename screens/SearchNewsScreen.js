@@ -187,10 +187,17 @@ export default function SearchNewsScreen() {
       }));
     } catch (error) {
       console.error("Translation error:", error);
-      Alert.alert(
-        "Translation Error",
-        "Failed to translate the article. Please try again.",
-      );
+      if (error.message.includes("429")) {
+        Alert.alert(
+          "Rate Limit Reached",
+          "Please wait a moment before trying to translate again.",
+        );
+      } else {
+        Alert.alert(
+          "Translation Error",
+          "Failed to translate the article. Please try again.",
+        );
+      }
     } finally {
       setTranslating(false);
     }

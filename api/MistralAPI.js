@@ -27,11 +27,8 @@ export const translateText = async (text, targetLanguage) => {
     });
 
     if (!response.ok) {
-      // Error message from Mistral's response
-      const errorData = await response.json();
-      throw new Error(
-        `Mistral API error: ${errorData.error?.message || "Unknown error"}`,
-      );
+      console.log("API Response Status:", response.status); // show error status code
+      throw new Error(`Status: ${response.status}`);
     }
 
     // Parse and return the translated text
