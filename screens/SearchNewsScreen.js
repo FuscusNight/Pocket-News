@@ -77,7 +77,7 @@ export default function SearchNewsScreen() {
     // Create a unique cache key based on search parameters
     const cacheKey = `search_${normalizedSearchTerm}_${language}_${sortBy}`;
     console.log(
-      `Searching for: "${searchTerm}" in ${language}, sorted by ${sortBy}`
+      `Searching for: "${searchTerm}" in ${language}, sorted by ${sortBy}`,
     );
 
     try {
@@ -115,7 +115,7 @@ export default function SearchNewsScreen() {
       // Store the articles in state so they can be displayed in the list.
       console.log(
         `✅ Found ${result.articles.length} articles for:`,
-        searchTerm
+        searchTerm,
       );
       setArticles(result.articles || []);
 
@@ -211,6 +211,14 @@ export default function SearchNewsScreen() {
                   source={{ uri: item.urlToImage }} // The image is fetched from the article object of newsAPI
                   style={styles.articleImage}
                   resizeMode="cover"
+                  onError={(e) => {
+                    console.error(
+                      "Image failed to load:",
+                      item.urlToImage,
+                      e.message,
+                    );
+                  }}
+                  defaultSource={require("../assets/oops.png")}
                 />
               )}
               <Text style={styles.articleTitle}>{item.title}</Text>
