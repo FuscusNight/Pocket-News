@@ -1,4 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage"; // to save and load language preference , persists after app is closed
 import { Picker } from "@react-native-picker/picker";
 import { NavigationContainer } from "@react-navigation/native"; // to manage navigation state and linking between screens.
 import { createStackNavigator } from "@react-navigation/stack"; // to create a stack navigator for managing navigation between screens.
@@ -31,10 +31,11 @@ const LANGUAGES = [
 function HomeScreen({ navigation }) {
   const [nativeLanguage, setNativeLanguage] = useState("en");
 
+  // React Hook that runs code at specific times in a component's lifecycle, use to tell app what to do upon start up of this screen
   useEffect(() => {
     // Load saved language preference
     loadLanguagePreference();
-  }, []);
+  }, []); // empty array [] means "run this code only once when the component first mounts" , without it it would run every time the component is re-rendered
 
   const loadLanguagePreference = async () => {
     try {
