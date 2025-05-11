@@ -207,7 +207,11 @@ export default function TopHeadlinesScreen() {
 
       {/* Initial fetch button */}
       {!hasFetched && (
-        <Button title="Show Headlines" onPress={() => fetchHeadlines()} />
+        <Button
+          color="#3f51b5"
+          title="Show Headlines"
+          onPress={() => fetchHeadlines()}
+        />
       )}
 
       {/* Conditional rendering based on loading, error, and data states */}
@@ -264,10 +268,12 @@ export default function TopHeadlinesScreen() {
               {/* Button container for both Read More and Translate */}
               <View style={styles.buttonContainer}>
                 <Button
+                  color="#3f51b5"
                   title="Read More"
                   onPress={() => Linking.openURL(item.url)}
                 />
                 <Button
+                  color="#3f51b5"
                   title={translating ? "Translating..." : "Translate"}
                   onPress={() => handleTranslate(item)}
                   disabled={translating}
@@ -296,7 +302,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   selectedCategory: {
-    backgroundColor: "#2196F3",
+    backgroundColor: "#3f51b5",
   },
   categoryText: {
     fontSize: 14,

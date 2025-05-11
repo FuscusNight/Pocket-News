@@ -254,7 +254,7 @@ export default function SearchNewsScreen() {
         </View>
       </View>
 
-      <Button title="Search" onPress={handleSearch} />
+      <Button color="#3f51b5" title="Search" onPress={handleSearch} />
 
       {loading ? (
         <ActivityIndicator
@@ -310,10 +310,12 @@ export default function SearchNewsScreen() {
               {/* Button container for both Read More and Translate */}
               <View style={styles.buttonContainer}>
                 <Button
+                  color="#3f51b5"
                   title="Read More"
                   onPress={() => Linking.openURL(item.url)}
                 />
                 <Button
+                  color="#3f51b5"
                   title={translating ? "Translating..." : "Translate"}
                   onPress={() => handleTranslate(item)}
                   disabled={translating}
