@@ -5,6 +5,11 @@ _This project is developed as part of an app development course._
 
 ---
 
+# NOTE : 
+You need a .env file in root of the project and in it you need both a NewsAPI Key saved in it and a MistralAI API Key, both are free to grab from both services.
+![image](https://github.com/user-attachments/assets/08b1b9ba-ca87-4f7a-9efb-c30357840695)
+
+
 ## 📋 Project Overview
 
 **Pocket News** allows folks to:
