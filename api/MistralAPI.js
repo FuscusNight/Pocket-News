@@ -14,7 +14,7 @@ export const translateText = async (text, targetLanguage) => {
         Authorization: `Bearer ${MISTRAL_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "mistral-tiny", // Using the smallest model for faster response
+        model: "mistral-small-latest", // mistral-tiny
         messages: [
           {
             role: "user",
