@@ -1,8 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"; // to save and load language preference , persists after app is closed
 import MaskedView from "@react-native-masked-view/masked-view";
 import { Picker } from "@react-native-picker/picker";
-import { NavigationContainer } from "@react-navigation/native"; // to manage navigation state and linking between screens.
-import { createStackNavigator } from "@react-navigation/stack"; // to create a stack navigator for managing navigation between screens.
 import * as React from "react";
 import { useState, useEffect, useRef } from "react";
 import {
@@ -13,6 +11,7 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 
 // Available languages for translation
@@ -82,7 +81,10 @@ export default function HomeScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.scrollContent}
+    >
       {/* Top row with two circular buttons */}
       <View style={styles.topRow}>
         <TouchableOpacity
@@ -170,7 +172,7 @@ export default function HomeScreen({ navigation }) {
           {nativeLanguage.charAt(0).toUpperCase() + nativeLanguage.slice(1)}
         </Text>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -178,6 +180,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  scrollContent: {
+    flexGrow: 1,
     justifyContent: "space-between",
     paddingVertical: 40,
   },
