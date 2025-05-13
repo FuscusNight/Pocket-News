@@ -1,14 +1,28 @@
 # 📰 Pocket News
 
-A mobile news app for discovering, searching, and reading news articles from around the world, powered by the **NewsAPI.org**.  
+A mobile news app for discovering, searching, and reading news articles from around the world whilst providing a means to translate them to different languages, powered by the **NewsAPI.org** and **MistralAI API**.  
 _This project is developed as part of an app development course._
 
 ---
 
-# NOTE : 
+# NOTE :
+
 You need a .env file in root of the project and in it you need both a NewsAPI Key saved in it and a MistralAI API Key, both are free to grab.
+
+- **NewsAPI Key** : https://newsapi.org/
+- **MistralAPI** : https://mistral.ai/
+
 ![image](https://github.com/user-attachments/assets/08b1b9ba-ca87-4f7a-9efb-c30357840695)
 
+Because of the limitation of free API keys , rate limit errors can occur, especially with Mistral.
+These Rate limit slightly missleading when it comes to Mistral , my own testing showed that neither request or token limits are hit when sometimes a 429 error limit is hit.
+Instead what is happening , the free tier key will sometimes get thorttled by the API system to give more head room for premium paid key requests , so if you get an error
+just keep re-trying, it's a ficle API, sometimes you can translate 10 things without issues, other times even using it for the first time in a day it hits you with a rate error and you gotta retry a few times or a wait a bit.
+
+### Apart from that , the rest is the usual :
+
+- NPM install to get all depedencies needed for the project auto installed
+- Have Expog go set up on your VSC and Phone to scan the QR so you can run on your phone for testing (or set up a virutal machine phone)
 
 ## 📋 Project Overview
 
@@ -40,7 +54,7 @@ You need a .env file in root of the project and in it you need both a NewsAPI Ke
 ## ✨ Should Haves
 
 - **2D World Map:**  
-  🗺️ Interactive map where users can zoom and click on countries to view the latest news tagged for that country.
+  🗺️ Interactive or just asthetic 2D map where users see the whole world displayed.
 - **AI Or Other Means Of Translation:**  
   🤖 Integrate Mistral AI to translate article titles and snippets. Users can select a language, and the AI will translate the selected article’s info that the news API gives it.
   If problems occur with the AI API, look into alternative means to do/request translations of non-english articles
@@ -53,9 +67,6 @@ You need a .env file in root of the project and in it you need both a NewsAPI Ke
 
 - **3D Globe:**  
   🌐 Replace the 2D map with a 3D interactive globe for a more engaging experience.
-- **Easy Copy Link:**  
-  🔗 Easy copy link button for an article to be shared.
-- _Might add more nice to haves..._
 
 ---
 
@@ -65,7 +76,5 @@ You need a .env file in root of the project and in it you need both a NewsAPI Ke
 - **Mistral AI** – For translating (Free Tier)
 - **React Native**
 - **Expo Go**
-- Some sort of library for getting 2D map of the world (or 3D globe)
-- _Maybe more as this project grows..._
 
 ---
