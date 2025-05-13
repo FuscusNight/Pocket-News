@@ -176,7 +176,7 @@ export default function TopHeadlinesScreen() {
           textAlign: "center",
         }}
       >
-        Top Headlines (English Only)
+        Top Headlines
       </Text>
 
       {/* Category selection buttons */}

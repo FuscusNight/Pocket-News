@@ -206,8 +206,6 @@ export default function SearchNewsScreen() {
   /* RENDERING START ! ! ! */
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Search News</Text>
-
       <TextInput
         placeholder="Enter keywords (e.g. technology, Ukraine)"
         value={query}
