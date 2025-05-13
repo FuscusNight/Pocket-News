@@ -1,6 +1,7 @@
 # 📰 Pocket News
 
-A mobile news app for discovering, searching, and reading news articles from around the world whilst providing a means to translate them to different languages, powered by the **NewsAPI.org** and **MistralAI API**.  
+## A mobile news app for discovering, searching, and reading news articles from around the world whilst providing a means to translate them to different languages, powered by the **NewsAPI.org** and **MistralAI API**.
+
 _This project is developed as part of an app development course at the Åland University Of Applied Sciences in a period of about 2 to 3 weeks._
 
 ---
