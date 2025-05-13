@@ -35,6 +35,7 @@ just keep re-trying, it's a ficle API, sometimes you can translate 10 things wit
 - 📰 **Read** article titles and summaries.
 - 🌐 **Open** full articles in their browser (due to API limitations).
 - 🎨 Enjoy a (hopefully) clean, user-friendly interface.
+- 🗣️ Translate titles and snippets of articles to different languages
 
 ---
 
@@ -83,4 +84,4 @@ just keep re-trying, it's a ficle API, sometimes you can translate 10 things wit
 
 ### Future ?
 
-Potentially after this course is done i might refine this more or even do some more note worthy changes but no gurantees , there is some repeating code i should move to its own file and import to the screens and styling is maybe a bit messy and repeated in places that could be adjusted.
+Potentially after this course is done i might refine this more or even do some more note worthy changes/additions but no gurantees , there is some repeating code i should move to its own file and then import to the screens and styling is maybe a bit messy and repeated in places which  could be adjusted, but for the main part for this final assignment i had in my 3rd year uni course, ths project is finished enough to be presented.
