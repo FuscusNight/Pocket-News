@@ -1,7 +1,7 @@
 # 📰 Pocket News
 
 A mobile news app for discovering, searching, and reading news articles from around the world whilst providing a means to translate them to different languages, powered by the **NewsAPI.org** and **MistralAI API**.  
-_This project is developed as part of an app development course._
+_This project is developed as part of an app development course at the Åland University Of Applied Sciences in a period of about 2 to 3 weeks._
 
 ---
 
@@ -15,16 +15,16 @@ You need a .env file in root of the project and in it you need both a NewsAPI Ke
 ![image](https://github.com/user-attachments/assets/08b1b9ba-ca87-4f7a-9efb-c30357840695)
 
 Because of the limitation of free API keys , rate limit errors can occur, especially with Mistral.
-These Rate limit slightly missleading when it comes to Mistral , my own testing showed that neither request or token limits are hit when sometimes a 429 error limit is hit.
+These Rate limit are slightly missleading when it comes to MistralAI API , my own testing showed that neither request or token limits are hit when sometimes a 429 error limit happens
 Instead what is happening , the free tier key will sometimes get thorttled by the API system to give more head room for premium paid key requests , so if you get an error
 just keep re-trying, it's a ficle API, sometimes you can translate 10 things without issues, other times even using it for the first time in a day it hits you with a rate error and you gotta retry a few times or a wait a bit.
 
 ### Apart from that , the rest is the usual :
 
 - NPM install to get all depedencies needed for the project auto installed
-- Have Expog go set up on your VSC and Phone to scan the QR so you can run on your phone for testing (or set up a virutal machine phone)
+- Have Expog go set up on your VSC and Phone to scan the QR so you can run it on your phone for testing (or set up a virutal machine phone if you'd like)
 
-## 📋 Project Overview
+## 📋 Original Project Overview
 
 **Pocket News** allows folks to:
 
@@ -78,3 +78,7 @@ just keep re-trying, it's a ficle API, sometimes you can translate 10 things wit
 - **Expo Go**
 
 ---
+
+### Future ?
+
+Potentially after this course is done i might refine this more or even do some more note worthy changes but no gurantees , there is some repeating code i should move to its own file and import to the screens and styling is maybe a bit messy and repeated in places that could be adjusted.
