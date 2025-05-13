@@ -84,4 +84,4 @@ just keep re-trying, it's a ficle API, sometimes you can translate 10 things wit
 
 ### Future ?
 
-Potentially after this course is done i might refine this more or even do some more note worthy changes/additions but no gurantees , there is some repeating code i should move to its own file and then import to the screens and styling is maybe a bit messy and repeated in places which  could be adjusted, but for the main part for this final assignment i had in my 3rd year uni course, ths project is finished enough to be presented.
+Potentially after this course is done i might refine this more or even do some more note worthy changes/additions but no gurantees , there is some repeating code i should move to its own file and then import to the screens and styling is maybe a bit messy and repeated in places which  could be adjusted, but for the main part for this final assignment i had in my app dev course in my 3rd year at uni, ths project is finished enough to be presented.
