@@ -23,7 +23,7 @@ just keep re-trying, it's a ficle API, sometimes you can translate 10 things wit
 ### Apart from that , the rest is the usual :
 
 - NPM install to get all depedencies needed for the project auto installed
-- Have Expog go set up on your VSC and Phone to scan the QR so you can run it on your phone for testing, remember your phone and PC have to be on the same network (or set up a virutal machine phone if you'd like)
+- Have [Expo go](https://expo.dev/) set up on [your VSC](https://marketplace.visualstudio.com/items?itemName=expo.vscode-expo-tools) and [Phone](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=es_MX) to scan the QR so you can run it on your phone for testing, remember your phone and PC have to be on the same network (or set up a virutal machine phone if you'd like) 
 - npx expo start to run it
 
 ### Extra Small Note
