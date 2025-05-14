@@ -27,7 +27,7 @@ just keep re-trying, it's a ficle API, sometimes you can translate 10 things wit
 - npx expo start to run it
 
 ### Extra Small Note
-**Currently untill 21st of May of 2025 , this code's main branch is in a frozen state by requriement of the assignment , I am not alowed to edit anything , i am aware i kept an extra screen js file i do not use anymore (randomNews) , it can be completely ignored, it servers no function anymore and I'll remove it once I am allowed to edit the code again**
+**Currently untill 21st of May of 2025 , this code's main branch is in a frozen state by requriement of the assignment , I am not alowed to edit anything , i am aware i kept an extra screen js file i do not use anymore (randomNews) , it can be completely ignored, it serves no function anymore and I'll remove it once I am allowed to edit the code again**
 
 ## 📋 Original Project Overview
 
