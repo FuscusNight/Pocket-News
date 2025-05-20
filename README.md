@@ -4,6 +4,9 @@
 
 _This project is developed as part of an app development course at the Åland University Of Applied Sciences in a period of about 2 to 3 weeks._
 
+
+![image](https://github.com/user-attachments/assets/9db684dc-db42-425f-9310-5a8847c1627c)
+
 ---
 
 # NOTE :
