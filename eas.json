@@ -14,13 +14,19 @@
     "preview": {
       "distribution": "internal",
       "env": {
-        "NODE_ENV": "production"
+        "NODE_ENV": "production",
+        "NEWS_API_KEY": "$NEWS_API_KEY",
+        "TRANSLATE_API_KEY": "$TRANSLATE_API_KEY",
+        "TRANSLATE_API_KEY2": "$TRANSLATE_API_KEY2"
       }
     },
     "production": {
       "autoIncrement": true,
       "env": {
-        "NODE_ENV": "production"
+        "NODE_ENV": "production",
+        "NEWS_API_KEY": "$NEWS_API_KEY",
+        "TRANSLATE_API_KEY": "$TRANSLATE_API_KEY",
+        "TRANSLATE_API_KEY2": "$TRANSLATE_API_KEY2"
       }
     }
   },
