@@ -32,7 +32,7 @@ const makeApiRequest = async (text, targetLanguage, apiKey) => {
           content: `Translate the following text to ${targetLanguage}. Return ONLY the translation, I REPEAT ONLY RETURN TRANSLATION, no explanations, no additional text: "${text}"`,
         },
       ],
-      temperature: 0.1, // Lower Temperature values result in more deterministic and accurate responses, while higher values introduce more creativity and randomness. https://docs.mistral.ai/getting-started/glossary/#temperature
+      temperature: 0.1, // Lower Temperature values result in more accurate responses, while higher values introduce more creativity and randomness. https://docs.mistral.ai/getting-started/glossary/#temperature
     }),
   });
 
@@ -65,45 +65,55 @@ const makeApiRequest = async (text, targetLanguage, apiKey) => {
 };
 
 export const translateText = async (text, targetLanguage) => {
+  // Graceful handling of missing API keys
   if (!MISTRAL_API_KEYS || MISTRAL_API_KEYS.length === 0) {
-    console.error(
-      "Configuration Error: No API keys found in environment variables",
-    );
-    throw new Error(
-      "No Mistral API keys configured. Please add TRANSLATE_API_KEY to your .env file",
-    );
+    console.error("Configuration Error: No API keys found in environment variables");
+    console.warn("Translation unavailable, returning original text");
+    return text; // Fallback: return original text instead of crashing
   }
 
   let lastError = null;
 
-  // Tries each API key in sequence
-  for (const apiKey of MISTRAL_API_KEYS) {
-    try {
-      return await makeApiRequest(text, targetLanguage, apiKey);
-    } catch (error) {
-      console.error(
-        `Translation attempt failed with key ending in ...${apiKey.slice(-4)}:`,
-        error,
-      );
-      lastError = error;
+  try {
+    // Tries each API key in sequence
+    for (const apiKey of MISTRAL_API_KEYS) {
+      try {
+        return await makeApiRequest(text, targetLanguage, apiKey);
+      } catch (error) {
+        console.error(
+          `Translation attempt failed with key ending in ...${apiKey.slice(-4)}:`,
+          error,
+        );
+        lastError = error;
 
-      // Check if it's a rate limit error
-      if (error.message.includes("429")) {
-        console.warn("Rate limit reached, attempting next key if available");
-        // If we're in single-key mode, throw a rate limit error
-        if (MISTRAL_API_KEYS.length === 1) {
-          throw new Error("429"); // Keep the 429 status in the error message
+        // Check if it's a rate limit error
+        if (error.message.includes("429")) {
+          console.warn("Rate limit reached, attempting next key if available");
+          if (MISTRAL_API_KEYS.length === 1) {
+            // If only one key and it's rate limited, return original text
+            console.warn("Single key rate limited, returning original text");
+            return text;
+          }
+          continue; // Try next key
         }
-        // Otherwise, continue to next key
-        continue;
+
+        // For non-rate-limit errors, continue to next key if available
+        if (MISTRAL_API_KEYS.length > 1) {
+          continue;
+        } else {
+          // Single key with non-rate-limit error, return original text
+          console.warn("Translation failed, returning original text");
+          return text;
+        }
       }
-
-      // If it's not a rate limit error, throw it immediately
-      throw error;
     }
-  }
 
-  // If we get here, all keys failed
-  console.error("All API keys failed to process the request");
-  throw lastError || new Error("All API keys failed");
+    // If we get here, all keys failed
+    console.error("All API keys failed to process the request");
+    console.warn("All translation attempts failed, returning original text");
+    return text; // Fallback to original text instead of crashing
+  } catch (error) {
+    console.error("Unexpected error in translateText:", error);
+    return text; // Ultimate fallback
+  }
 };
