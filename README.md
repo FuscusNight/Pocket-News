@@ -30,7 +30,9 @@ just keep re-trying, it's a ficle API, sometimes you can translate 10 things wit
 - npx expo start to run it
 
 ### Extra Small Note
-**Currently untill 21st of May of 2025 , this code's main branch is in a frozen state by requriement of the assignment , I am not alowed to edit anything , i am aware i kept an extra screen js file i do not use anymore (randomNews) , it can be completely ignored, it serves no function anymore and I'll remove it once I am allowed to edit the code again**
+**I am aware i kept an extra screen js file i do not use anymore (randomNews) , it can be completely ignored, it serves no function anymore , I'll do a bit of a code clean up where I'll remove it and also repurpose repeating code into components but a new IT job this summer for my University internship is keeping me busy**
+### Additionaly
+**There is a[ BuildWIP](https://github.com/FuscusNight/Pocket-News/tree/BuildWIP) branch in which i set up the means to create a apk file of a preview build one could then install on their phones, so check it out if you'd like to make an instalable app**
 
 ## 📋 Original Project Overview
 
